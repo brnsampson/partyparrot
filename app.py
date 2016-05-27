@@ -3,7 +3,7 @@ import os
 from flask import Flask, request, jsonify
 app = Flask(__name__)
 
-slack_team_token = os.environ.get('SLACK_TEAM_TOKEN')
+slack_team_tokens = os.environ.get('SLACK_TEAM_TOKENS').split(':')
 
 
 @app.route('/', methods=['GET'])
@@ -13,7 +13,7 @@ def index():
 
 @app.route('/', methods=['POST'])
 def slack():
-    if slack_team_token and request.form.get('token') != slack_team_token:
+    if slack_team_token and request.form.get('token') not in slack_team_tokens:
         return 'Unauthorized', 401
 
     text = request.form.get('text')
